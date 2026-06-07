@@ -123,6 +123,37 @@ The important property is exact round-trip:
 - derived matrix/annotation fields are dropped
 - decode reconstructs the normalized trace contract exactly
 
+## Agda adapter
+
+`zkperf` now carries the HF publication side of the Agda adapter flow:
+
+```bash
+python3 scripts/publish-agda-zkperf-bundle.py /path/to/agda-bundle \
+  --path-in-repo runs/agda/my-run
+python3 scripts/publish-agda-run-index.py /path/to/bundle-a /path/to/bundle-b
+```
+
+The sibling Agda scaffold now emits a live witness bundle during the run. The
+bundle carries canonical runtime surfaces:
+
+- `agda_trace.jsonl`
+- `zkperf_sample_trace.json`
+
+and compatibility/publication surfaces:
+
+- `trace.jsonl`
+- `source.json`
+- `compact.json`
+- `roundtrip.json`
+- `stats.json`
+- `manifest.json`
+
+This keeps Agda responsible for producing the live witness surface while
+`zkperf` owns dataset publication and ingest validation.
+
+For discovery without browsing commits, `runs/agda/index.json` can be refreshed
+from a set of local bundle manifests with `scripts/publish-agda-run-index.py`.
+
 ## Bounded MDL Evidence
 
 For downstream systems that need a simple machine-readable MDL witness surface,
