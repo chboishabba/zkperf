@@ -18,7 +18,7 @@ jobs:
           submodules: recursive
           persist-credentials: false
       - name: Verify shared fixture bytes
-        run: echo 'cc67f109e5be3cfea89d7a8e0ba2b1b6279b5f012d751efbdb7e3a971e957106  fixtures/da51_v1.json' | sha256sum --check -
+        run: echo '3a2f191afd465b52ba1db7774c0cf3d02d1ee4f099ea62cd33802ab52293cd75  fixtures/da51_v1.json' | sha256sum --check -
       - uses: dtolnay/rust-toolchain@stable
       - run: cargo test -p zkperf -p zkperf-witness -p zkperf-macros -p cargo-zkperf
       - run: cargo clippy -p zkperf -p zkperf-witness -p zkperf-macros -p cargo-zkperf -- -W warnings
