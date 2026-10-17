@@ -51,3 +51,7 @@ path = "src/bin/regs.rs"
 [[bin]]
 name = "zkperf-service"
 path = "src/bin/service.rs"
+
+[[bin]]
+name = "zkperf-da51"
+path = "src/bin/da51.rs"
