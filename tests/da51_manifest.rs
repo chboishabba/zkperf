@@ -1,6 +1,6 @@
 use serde_json::Value;
 use std::fs;
-use zkperf::da51::{AtlasCoord, Da51Address};
+use zkperf::da51::{AtlasCoord, Da51Address, Da51Error};
 
 #[test]
 fn shared_manifest_atlas_addresses_are_canonical_and_unique() {
@@ -16,6 +16,31 @@ fn shared_manifest_atlas_addresses_are_canonical_and_unique() {
         let coord = AtlasCoord::decode(address).unwrap();
         assert_eq!(coord.serial as usize, serial);
         assert!(seen.insert(address.raw()));
+    }
+}
+
+#[test]
+fn shared_manifest_negative_addresses_are_rejected() {
+    let raw = fs::read_to_string("fixtures/da51_v1.json").unwrap();
+    let payload: Value = serde_json::from_str(&raw).unwrap();
+    let negative = payload["negative"].as_object().unwrap();
+
+    for (name, value) in negative {
+        let text = value.as_str().unwrap();
+        let expected = match name.as_str() {
+            "invalid_biome" => Da51Error::InvalidAtlasBiome(9),
+            "invalid_level" => Da51Error::InvalidAtlasLevel(6),
+            "invalid_status" => Da51Error::InvalidAtlasStatus(5),
+            "nonzero_reserved" => Da51Error::NonZeroReserved(1),
+            "unknown_type" => Da51Error::NotAtlas(9),
+            "wrong_prefix" => Da51Error::WrongPrefix(0xCAFE),
+            _ => panic!("unexpected negative fixture: {name}"),
+        };
+        let actual = match text.parse::<Da51Address>() {
+            Err(error) => error,
+            Ok(address) => AtlasCoord::decode(address).unwrap_err(),
+        };
+        assert_eq!(actual, expected, "negative case {name}");
     }
 }
 
