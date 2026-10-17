@@ -25,9 +25,35 @@ DA51 has three distinct layers:
 
 `src/provenance.rs` defines `Da51EvidenceRef { address, producer, artifact, kind }` for the third layer. Evidence kinds are proof, trace, benchmark, source and receipt. The envelope keeps provenance explicit instead of overloading the address bits.
 
+`RuntimeEvidenceLink` optionally relates one concrete zkperf evidence record to a cross-system formal demand / proof obligation / statement digest / artifact revision. The link is for provenance, navigation and selective reopening only. It leaves existing `Da51EvidenceRef` constructors unchanged.
+
+Typical graph:
+
+```text
+SLR ProofObligation
+   |-- FormalProofDemand -> dashi-repo -> formal backend -> kernel certificate
+   `-- runtime/empirical route -> zkperf trace/benchmark
+
+both may share:
+   DA51 address
+   demand/obligation references
+   ITIR artifact/shard provenance
+
+but a zkperf trace/benchmark never becomes the kernel certificate.
+```
+
 ## Authority boundary
 
 A DA51 value or provenance edge is **not** a proof result. It does not itself establish theorem truth, literature truth, ZK proof validity, security severity, exploitability, or authorization. Existing zkperf witness/CBOR/proof payloads remain authoritative for their own claims.
+
+The runtime-evidence companion hard-codes the additional boundaries:
+
+```text
+runtime evidence linked to formal demand != formal proof
+runtime evidence linked to DA51 != security conclusion
+benchmark/trace receipt != SLR formal payment
+formal proof linkage != vulnerability or authorization
+```
 
 Historical DA51 trace identities are retained as legacy identities. They are never reinterpreted as atlas coordinates unless their type nibble is exactly `8` and the canonical type-8 decoder accepts the payload.
 
