@@ -9,7 +9,10 @@ User=mdupont
 Group=mdupont
 WorkingDirectory=/var/lib/zkperf
 
-# Watch for new perf.data files, read raw binary, emit DA51 CBOR shards
+# Watch for new perf.data files and emit the existing DA51 CBOR shard format.
+# The CBOR DA51 marker is a payload/framing convention; it is not by itself a
+# 64-bit DA51 address. Canonical 0xDA51[16|4|44] identities are validated by
+# the zkperf::da51 codec / zkperf-da51 inspector and are attached explicitly.
 ExecStart=/opt/zkperf/bin/zkperf-record watch /var/lib/zkperf/incoming /var/lib/zkperf/shards
 
 Restart=always
