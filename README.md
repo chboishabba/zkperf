@@ -106,3 +106,6 @@ make report                                    # Generate JSON report
 AGPL-3.0
 
 For commercial Apache 2.0 licensing, contact: https://github.com/meta-introspector/introspector-llc
+
+## Planned defensive efficacy evaluation
+- [ARTEX / zkSEC witness efficacy roadmap](docs/ARTEX_DEFENSIVE_EFFICACY.md): offline independent ground truth, paired witness evaluation, coverage and residual accounting. Planned; no benchmark results yet.
